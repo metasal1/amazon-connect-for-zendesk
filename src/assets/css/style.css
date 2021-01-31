@@ -1,0 +1,142 @@
+html, body { border: 0; margin: 0; padding: 0; }
+body { font: 80% "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif; }
+
+/* entity categories and color mapping */ 
+    
+/*
+	BOOK - #98DF8A
+	BRAND - #FF9896
+	COMMERCIAL_ITEM - #C7C7C7
+	DATE - #9EDAE5
+	EVENT - #FFBB78
+	GAME - #C49C94
+	LOCATION - #C5B0D5
+	MOVIE - #DBDB8D
+	ORGANIZATION - #F7B6D2
+	OTHERS - #AEC7E8
+	OTHER - #17BECF
+	PERSON - #BCBD22
+	QUANTITY - #7F7F7F
+	SOFTWARE - #E377C2
+	SONG - #8C564B
+	TITLE_OTHERS - #9467BD
+	TITLE - #D62728
+*/
+	
+.line_color_book {
+		border-bottom: 3px solid #98DF8A;
+}
+
+.line_color_brand {
+		background-color: #FF9896;
+}
+
+.line_color_commercial_item {
+		border-bottom: 3px solid #C7C7C7;
+}
+
+.line_color_date {
+		border-bottom: 3px solid #9EDAE5;
+}
+
+.line_color_event {
+		border-bottom: 3px solid #FFBB78;
+}
+
+.line_color_game {
+		border-bottom: 3px solid #C49C94;
+}
+
+.line_color_location {
+		border-bottom: 3px solid #C5B0D5;
+}
+
+.line_color_movie {
+		border-bottom: 3px solid #DBDB8D;
+}
+
+.line_color_organization {
+		border-bottom: 3px solid #F7B6D2;
+}
+
+.line_color_others {
+		border-bottom: 3px solid #98DF8A;
+}
+
+.line_color_other {
+		border-bottom: 3px solid #17BECF;
+}
+
+.line_color_person {
+		border-bottom: 3px solid #BCBD22;
+}
+
+.line_color_quantity {
+		border-bottom: 3px solid #7F7F7F;
+}
+
+.line_color_software {
+		border-bottom: 3px solid #E377C2;
+}
+
+.line_color_song:before {
+		border-bottom: 3px solid #8C564B;
+}
+
+.line_color_title_others {
+		border-bottom: 3px solid #9467BD;
+}
+
+.line_color_title {
+		border-bottom: 3px solid #D62728;
+}
+
+.key_phrases_line_color {
+		border-bottom: 2px solid #007dbc
+}
+
+	.line_color_key_phrases {
+		border-bottom: 2px solid #007dbc
+}
+
+.awsui .awsui-tooltip-trigger {
+		display: inline-block;
+}
+
+.awsui .awsui-tooltip-position-bottom {
+			padding-top: 1rem;
+}
+
+.awsui .awsui-tooltip-wrap {
+		display: none;
+		position: absolute;
+		z-index: 1001;
+}
+
+.awsui .awsui-tooltip-text {
+			position: relative;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			color: #d5dbdb;
+			padding: 0.75rem 1rem;
+			font-size: 1.2rem;
+			line-height: 1.6rem;
+			font-family: "Amazon Ember", "Helvetica Neue", Roboto, Arial, sans-serif;
+			border-radius: 2px;
+			word-wrap: break-word;
+			background-color: #121312;
+}
+
+	.awsui .awsui-tooltip-text {
+			position: relative;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			color: #d5dbdb;
+			padding: 0.75rem 1rem;
+			font-size: 1.2rem;
+			line-height: 1.6rem;
+			font-family: "Amazon Ember", "Helvetica Neue", Roboto, Arial, sans-serif;
+			border-radius: 2px;
+			word-wrap: break-word;
+			background-color: #121312;
+}

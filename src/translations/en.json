@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "Amazon Connect",
+    "short_description": "Integration with Amazon Connect and AWS CX services",
+    "long_description": "**What's new** \n\n- We’ve now made the app open source! This enhancement will allow for a more rapid pace of innovation. There are occasionally features that a customer would like to be included in the app, however these have not yet been prioritised or built by us. Transitioning the app to open source will allow customers to contribute features that they need ahead of when we can prioritise to build them. Head over to our GitHub account [https://github.com/voicefoundryap/amazon-connect-for-zendesk](https://github.com/voicefoundryap/amazon-connect-for-zendesk) to learn how you can contribute towards the development of the app. \n\n**What's fixed** \n\n  1. Currently when an agent transfers a call to another agent, call recordings and contact details for the transferred part of the call are not being added to any tickets. This fix will ensure that call recordings and contact details for the transferred part of a call are not being lost, and are being appended to the appropriate ticket. To understand how agent to agent transfers work in Zendesk, please read section 6.5 of the [installation and user guide](https://github.com/voicefoundryap/amazon-connect-for-zendesk/blob/master/docs/Amazon%20Connect%20App%20for%20Zendesk%20v2.1.2%20-%20Installation%20and%20User%20Guide.pdf). If you have speech analysis enabled, you will need to follow [these steps](https://github.com/voicefoundryap/amazon-connect-for-zendesk/blob/master/docs/Agent%20to%20agent%20transfer%20bug%20fix%20for%20customers%20using%20speech%20analysis%20v2.1.2.pdf) in order to get this bug fix working in your environment. \n  2. At times when making an outbound call through an existing ticket, the speech analysis gets appended as a public comment instead of an internal note. This bug fix will ensure that speech analysis is always appended as an internal note. \n\n**Available only to agents with “Talk - Partner Edition” seats (see [zendesk.com/talk/pricing](https://www.zendesk.com/talk/pricing)).**  \n\nAn integrated solution from Zendesk and Amazon Connect combines advanced contact center capabilities with a sophisticated ticketing system, empowering teams with powerful tools for routing, tracking, prioritizing and solving customer service interactions. Contact centers have a centralized platform for all customer communication to boost agent productivity, maintain full visibility into support operations, and enable seamless customer communication across channels. \n\n[![Find out more here](https://zen-marketing-product.s3.amazonaws.com/product/images/awesome-tables/amazon_connect_listing.png)](https://zendesk.wistia.com/medias/3j73tdijv0) \n\n## Benefits: \n\n### Unified interface \n\nAllow agents to take calls from a single support platform by embedding a web-based softphone directly into Zendesk Support. All customer interactions and data including caller ID and history, tickets with call data and agent assignment are stored in one place, giving agents the context they need to provide more personalized support.  \n\n### Time-saving agent tools \n\nLink callers to existing Zendesk Support end-user profiles based on the caller’s phone number. Zendesk automatically turns calls and voicemails into tickets with information on the inbound caller for easy record keeping and issue resolution. At the end of a call, the ticket is updated with additional details, including call recording.  \n\n### Advanced AI/Machine Learning services \n\nCombine AWS Artificial Intelligence / Machine Learning Services such as Transcribe, Comprehend and Personalize to deliver more sophisticated, proactive and anticipatory customer service. \n\nFind out more about Amazon Connect [here](https://aws.amazon.com/connect/).",
+    "installation_instructions": "View the installation and user guide **[here](https://github.com/voicefoundryap/amazon-connect-for-zendesk/blob/master/docs/Amazon%20Connect%20App%20for%20Zendesk%20v2.1.2%20-%20Installation%20and%20User%20Guide.pdf)**. \n\nSupporting assets may be found here:  \n\n- **[CloudFormation template for real-time speech analysis](https://zen-marketing-product.s3.amazonaws.com/product/docs/AmazonConnectApp.yml)**  \n- **[CloudFormation template for offline speech analysis](https://zen-marketing-product.s3.amazonaws.com/product/docs/AmazonConnectOfflineSA.yaml)**  \n- **[Sample Lex Bot](https://zen-marketing-product.s3.amazonaws.com/product/docs/ZendeskDemo_LEXBot.zip)**",
+    "parameters": {
+      "connectInstanceUrl": {
+        "label": "Amazon Connect URL",
+        "helpText": "Ask your administrator to provide you with the URL for your Amazon Connect instance."
+      },
+      "ssoSignInUrl": {
+        "label": "Single sign-on URL",
+        "helpText": "If your Connect instance is configured with single sign-on (SSO) ask your administrator to provide you with the relevant URL to sign in. If you need to login manually leave this field blank."
+      },
+      "zendeskTicket": {
+        "label": "Contact attribute name containing Zendesk Ticket Number",
+        "helpText": "If an Amazon Connect contact attribute with this name is set in a contact flow then the specified Zendesk ticket will be opened."
+      },
+      "outboundCli": {
+        "label": "Default entry point phone number",
+        "helpText": "The call centre number that will be reported in tickets as the number that the call was dialed from in outbound calls and the number that was called in inbound calls. For inbound calls it can be overridden by setting the `dialed_number` attribute in your contact flow."
+      },
+      "defaultCountryPrefix": {
+        "label": "Default country dialing prefix",
+        "helpText": "If specified, this prefix will be used in matching Zendesk users' telephone numbers that are in local format (without the prefix). Example: +61 for Australia."
+      },
+      "createTicketAfterMinutes": {
+        "label": "Create ticket after minutes",
+        "helpText": "This setting controls whether a recent ticket of a recognised caller should be opened instead of creating a new one. If there's no ticket updated within the specified time then new ticket will be created. It can be overridden by setting the `recent_ticket_timeout` attribute in your contact flow."
+      }
+    }
+  }
+}

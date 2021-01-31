@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <style>
+        html {
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif !important;
+            font-size: 17px;
+            letter-spacing: 0.4px;
+            width: 360px;
+            font-weight: 300;
+        }
+
+        p {
+            margin-block-end: 0;
+            line-height: 140%;
+            text-align: center;
+        }
+
+        #ccpContainer iframe {
+            border: none;
+        }
+
+        #ccpContainer {
+            width: 360px;
+            height: 510px;
+            display: none;
+        }
+
+        #loadingContainer {
+            margin: 40 12px 0;
+        }
+
+        #whitelisting {
+            display: none;
+            padding: 7px;
+        }
+
+        #whitelisting .blurb {
+            font-size: 0.80em;
+            margin: 25px 20px;
+            font-weight: 400;
+            color: #777;
+        }
+
+        #loadingImg {
+            margin: auto;
+            margin-top: 10px;
+            display: block;
+        }
+
+        #appUrl,
+        #instanceUrl {
+            font-family: monospace;
+            letter-spacing: -0.2px;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        #newTicketContainer {
+            display: none;
+            font-size: smaller;
+            height: 160px;
+            padding: 5px 16px;
+            background-color: #f2f2f2;
+        }
+
+        #newTicketRequester {
+            text-align: center;
+            width: 100%;
+            padding: 0px;
+            box-sizing: border-box;
+            font-size: 17px;
+        }
+
+        #newTicketContainer button {
+            color: #666;
+            width: 145px;
+            height: 35px;
+            border-radius: 2px;
+            border: none;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            background-color: #FFFFFF;
+            text-align: center;
+            white-space: normal;
+            padding: 0px;
+            margin: 12px 8px;
+            letter-spacing: 0.4px;
+            font-weight: 600;
+        }
+
+        #newTicketContainer button:disabled {
+            cursor: not-allowed;
+            background-color: #ebebe4;
+            color: #999;
+        }
+    </style>
+
+
+    <div id="loadingContainer">
+        <p>Loading your Amazon Connect softphone</p>
+        <img id="loadingImg" src="loading-circles.gif" />
+        <div id="whitelisting">
+            <p>Please log in to Amazon Connect to load the&nbsp;softphone here.</p>
+            <p class="blurb">If you are installing the AWS Connector for the first time,
+                please add the below two URLs to the approved origins list in the Application integration section of
+                your
+                Amazon Connect instance:</p>
+            <p id="instanceUrl">Obtaining the instance URL ...</p>
+            <p id="appUrl">Obtaining the app URL ...</p>
+        </div>
+    </div>
+
+    <div id="ccpContainer"></div>
+
+    <div id="newTicketContainer">
+        <div id="newTicketRequester">(New user will be created)</div>
+        <button id="newTicketCreateBtn" type="submit">Create ticket</button>
+        <button id="attachToCurrentBtn" type="submit" disabled>Attach to current</button>
+    </div>
+
+    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+    <script src="lib/connect-streams.min.js"></script>
+    <script src="lib/aws-sdk-2.435.0.min.js"></script>
+    <script type="module" src="scripts/topBar/index.js"></script>
+
+</body>
+
+</html>

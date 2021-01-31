@@ -1,0 +1,89 @@
+{
+  "name": "Amazon Connect",
+  "author": {
+    "name": "VoiceFoundry APAC",
+    "email": "zendeskconnect@voicefoundry.com.au",
+    "url": "https://www.voicefoundry.com.au"
+  },
+  "defaultLocale": "en",
+  "private": false,
+  "location": {
+    "support": {
+      "user_sidebar": {
+        "url": "assets/sideBar.html",
+        "autoHide": false,
+        "size": {
+          "width": "320px",
+          "height": "465px"
+        }
+      },
+      "ticket_sidebar": {
+        "url": "assets/sideBar.html",
+        "autoHide": false,
+        "size": {
+          "width": "320px",
+          "height": "465px"
+        }
+      },
+      "new_ticket_sidebar": {
+        "url": "assets/sideBar.html",
+        "autoHide": false,
+        "size": {
+          "width": "320px",
+          "height": "465px"
+        }
+      },
+      "top_bar": {
+        "url": "assets/topBar.html",
+        "size": {
+          "width": "360px",
+          "height": "510px"
+        }
+      },
+      "background": {
+        "url": "assets/background.html"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "vfApplicationName",
+      "type": "hidden",
+      "default": "AWS Connector"
+    },
+    {
+      "name": "connectInstanceUrl",
+      "type": "url",
+      "required": true,
+      "default": ""
+    },
+    {
+      "name": "ssoSignInUrl",
+      "type": "url",
+      "default": ""
+    },
+    {
+      "name": "outboundCli",
+      "type": "text",
+      "required": true,
+      "default": ""
+    },
+    {
+      "name": "defaultCountryPrefix",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "createTicketAfterMinutes",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "zendeskTicket",
+      "type": "text",
+      "default": "zendesk_ticket"
+    }
+  ],
+  "version": "2.1.2",
+  "frameworkVersion": "2.0"
+}

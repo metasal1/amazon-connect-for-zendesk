@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>vfConnect Ticket Sidebar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
+    <link type="text/css" href="css/tipsy.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="lib/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.tipsy.js"></script>
+
+    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+
+    <script>
+        const showSection = function (sectionName) {
+            $('.panel-container').hide();
+            $('.main-tab').removeClass('bold-text');
+            $('#' + sectionName + 'Section').show();
+            $('#' + sectionName + 'Tab').addClass('bold-text');
+        }
+        const showComprehendSection = function (sectionName) {
+            $('.comprehend-panel').hide();
+            $('.comprehend-tab').removeClass('bold-text');
+            $('#' + sectionName + 'Section').show();
+            $('#' + sectionName + 'Tab').addClass('bold-text');
+        }
+    </script>
+</head>
+
+<body>
+    <style>
+
+        :root {
+            --dash-size: 377;
+        }
+
+        #tabsHeader {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-bottom: 1px solid black;
+        }
+
+        #tabsHeader div {
+            cursor: pointer;
+        }
+
+        #comprehendHeader {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-bottom: 1px solid black;
+        }
+
+        #comprehendHeader div {
+            cursor: pointer;
+        }
+
+        .panel-container {
+            padding: 10px 0;
+        }
+
+        #overallSentimentContainer {
+            text-align: center;
+            padding: 10px 0 20px 0;
+        }
+
+        .sentiment-row {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+
+        .voice-text-box {
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            overflow-y: auto;
+            top: 60px;
+            bottom: 0px;
+            width: 100%;
+        }
+
+        .transcript-row {
+            display: flex;
+            color: white;
+            font-size: 80%;
+            ;
+        }
+
+        .transcript-row div {
+            margin: 3px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 300px;
+        }
+
+        .customer-row {
+            justify-content: flex-end;
+        }
+
+        .customer-row div {
+            background-color: #30AABC;
+        }
+
+        .agent-row {
+            justify-content: flex-start;
+        }
+
+        .agent-row div {
+            background-color: #03363D;
+        }
+
+        #comprehendHeader {
+            margin-bottom: 10px;
+        }
+
+        #comprehendSection table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #comprehendSection th {
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            padding: 8px;
+        }
+
+        #comprehendSection td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .comprehend-panel {
+            position: fixed;
+            top: 102px;
+            bottom: 0px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .comprehend-search {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 10px;
+        }
+
+        .comprehend-search input {
+            width: 250px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 1px solid #ccc
+        }
+
+        .donutContainer {
+            position: relative;
+            float: left;
+        }
+
+        .donutContainer .donutLabel {
+            /* font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif; */
+            color: #666;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+        }
+
+        .donutLabel h2 {
+            line-height: 0px;
+            margin-top: 72px;
+            font-size: 22px;
+            letter-spacing: -2px;
+        }
+
+        .donutLabel h2 span {
+            padding-right: 6px;
+        }
+
+        .donutLabel h3 {
+            font-size: 15px;
+            margin-top: -8px;
+            font-weight: 300;
+        }
+
+        svg {
+            transform: rotate(-90deg);
+        }
+
+        .donut {
+            stroke-dasharray: var(--dash-size);
+            r: 60;
+            cy: 81;
+            cx: 81;
+            stroke-width: 18;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        .donut-positive {
+            -webkit-animation: donutPositive 0.5s ease-out forwards;
+            animation: donutPositive 0.5s ease-out forwards;
+        }
+
+        .donut-negative {
+            -webkit-animation: donutNegative 0.5s ease-out forwards;
+            animation: donutNegative 0.5s ease-out forwards;
+        }
+
+        .donut-neutral {
+            -webkit-animation: donutNeutral 0.5s ease-out forwards;
+            animation: donutNeutral 0.5s ease-out forwards;
+        }
+
+        .donut-mixed {
+            -webkit-animation: donutMixed 0.5s ease-out forwards;
+            animation: donutMixed 0.5s ease-out forwards;
+        }
+
+        @-webkit-keyframes donutPositive {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @keyframes donutPositive {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @-webkit-keyframes donutNegative {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @keyframes donutNegative {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @-webkit-keyframes donutNeutral {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @keyframes donutNeutral {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @-webkit-keyframes donutMixed {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+
+        @keyframes donutMixed {
+            from {
+                stroke-dashoffset: var(--dash-size);
+            }
+        }
+    </style>
+
+    <script type="module" src="scripts/sideBar/index.js"></script>
+
+    <!-- ------ transcribe/comprehend HTML conent --------------------------------------------------------------------------- -->
+
+    <section id="section-main">
+
+        <div id="tabsHeader">
+            <div onclick="showSection('transcribe');" id="transcribeTab" class="main-tab bold-text">Transcribe</div>
+            <div onclick="showSection('comprehend');" id="comprehendTab" class="main-tab">Comprehend</div>
+            <div onclick="showSection('sentiment');" id="sentimentTab" class="main-tab">Sentiment Analysis</div>
+        </div>
+
+        <div id="panelContainer">
+
+            <div id="transcribeSection" class="panel-container">
+
+                <div id="transcript">
+                    <div class="voice-text-box transcript-text" name="transcript-text" id="transcript-text">
+                    </div>
+                </div>
+            </div>
+
+            <div id="comprehendSection" class="panel-container" style="display: none;">
+
+                <div id="comprehendHeader">
+                    <div onclick="showComprehendSection('entities');" id="entitiesTab" class="comprehend-tab bold-text">
+                        Entities</div>
+                    <div onclick="showComprehendSection('keyPhrases');" id="keyPhrasesTab" class="comprehend-tab">Key
+                        phrases</div>
+                </div>
+
+                <div id="entitiesSection" class="comprehend-panel">
+
+                    <div class="comprehend-search">
+                        <input type="text" placeholder="Search by entity, category or confidence" />
+                    </div>
+
+                    <table id="entitiesTable">
+                        <tr>
+                            <th>Entity</th>
+                            <th>Category</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="keyPhrasesSection" class="comprehend-panel" style="display: none;">
+
+                    <div class="comprehend-search">
+                        <input type="text" placeholder="Search by key phrases or confidence" />
+                    </div>
+
+                    <table id="keyPhrasesTable">
+                        <tr>
+                            <th>Key phrase</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="sentimentSection" class="panel-container" style="display: none;">
+
+                <div id="overallSentimentContainer">
+                    <span>Overall Sentiment: <span id="overallSentiment"> - </span></span>
+                </div>
+
+
+                <div class="donutContainer">
+                    <div class="donutLabel">
+                        <h2><span id="labelPositive">0</span>%</h2>
+                        <h3>POSITIVE</h3>
+                    </div>
+                    <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <title>Positive Sentiment</title>
+                            <circle class="donut" stroke="#f2f2f2" />
+                            <circle id="circlePositive" style="stroke-dashoffset: var(--dash-size);"
+                                class="donut donut-positive" stroke="#1d1" />
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="donutContainer">
+                    <div class="donutLabel">
+                        <h2><span id="labelNegative">0</span>%</h2>
+                        <h3>NEGATIVE</h3>
+                    </div>
+                    <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <title>Negative Sentiment</title>
+                            <circle class="donut" stroke="#f2f2f2" />
+                            <circle id="circleNegative" style="stroke-dashoffset: var(--dash-size);"
+                                class="donut donut-negative" stroke="#f31" />
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="donutContainer" style="clear: both;">
+                    <div class="donutLabel">
+                        <h2><span id="labelNeutral">0</span>%</h2>
+                        <h3>NEUTRAL</h3>
+                    </div>
+                    <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <title>Neutral Sentiment</title>
+                            <circle class="donut" stroke="#f2f2f2" />
+                            <circle id="circleNeutral" style="stroke-dashoffset: var(--dash-size);"
+                                class="donut donut-neutral" stroke="#38f" />
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="donutContainer">
+                    <div class="donutLabel">
+                        <h2><span id="labelMixed">0</span>%</h2>
+                        <h3>MIXED</h3>
+                    </div>
+                    <svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <title>Mixed Sentiment</title>
+                            <circle class="donut" stroke="#f2f2f2" />
+                            <circle id="circleMixed" style="stroke-dashoffset: var(--dash-size);"
+                                class="donut donut-mixed" stroke="#fc2" />
+                        </g>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
