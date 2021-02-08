@@ -1,6 +1,5 @@
 import logStamp from '../util/log.js';
 import session from './session.js';
-import updateTicket from './updateTicket.js';
 import { dialableNumber } from './phoneNumbers.js';
 import { zafClient } from './zafClient.js';
 
@@ -53,6 +52,20 @@ const traceUrl = (contactId) => {
     return url;
 }
 
+const updateTicket =  async (ticketId, changes) => {
+    const data = await zafClient.request({
+        url: `/api/v2/tickets/${ticketId}.json`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            ticket: changes
+        })
+    }).catch((err) => { console.error(logStamp('Error while updating ticket'), err) });
+
+    if (data && data.ticket)
+        console.log(logStamp(`Updated ticket ${data.ticket.id} with: `), changes);
+}
+
 const updateTicketWithContactDetails = async (contact, ticketId) => {
     // adds information to an existing ticket about the call, including a link to call recording
     // console.log(logStamp(`Updating ticket #${ticketId} with contact details`), contact);
@@ -60,10 +73,11 @@ const updateTicketWithContactDetails = async (contact, ticketId) => {
     let direction;
     let htmlBody = '', plainBody = '';
 
+    outboundCli = appSettings.outboundCli;
+    inboundDialedNumber = appSettings.inboundDialedNumber || outboundCli;
+
     if (!session.contactDetailsAppended) {
 
-        outboundCli = appSettings.outboundCli;
-        inboundDialedNumber = appSettings.inboundDialedNumber || outboundCli;
         const agent = session.agent;
 
         const contactCallInfo = {
@@ -106,6 +120,7 @@ const updateTicketWithContactDetails = async (contact, ticketId) => {
     if (Object.keys(contactAttributesInfo).length) {
         htmlBody += (htmlBody ? '<br>' : '') + contactDetailsHtml(contactAttributesInfo, 'Amazon Connect Contact Attributes', false);
         plainBody += (plainBody ? '\r\n' : '') + contactDetailsPlain(contactAttributesInfo, 'Amazon Connect Contact Attributes', false);
+        localStorage.setItem('vf.storedAttributes', JSON.stringify(contactAttributesInfo));
     }
 
     if (htmlBody) {

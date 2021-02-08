@@ -28,6 +28,10 @@
       "createTicketAfterMinutes": {
         "label": "Create ticket after minutes",
         "helpText": "This setting controls whether a recent ticket of a recognised caller should be opened instead of creating a new one. If there's no ticket updated within the specified time then new ticket will be created. It can be overridden by setting the `recent_ticket_timeout` attribute in your contact flow."
+      },
+      "medialess": {
+        "label": "Enable media-less mode",
+        "helpText": "Select this option if you are using your Zendesk account in a VDI environment. You will first need to open the CCP in an independent window or tab before launching this app."
       }
     }
   }
