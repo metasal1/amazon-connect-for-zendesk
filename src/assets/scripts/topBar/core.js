@@ -39,7 +39,7 @@ export const getFromZD = async (path, target, defaultValue = null) => {
         contentType: 'application/json',
     }).catch((err) => { console.error(logStamp(`getting ${target} by ${path} from Zendesk API: `), err) });
     const returnValue = data && data[target] ? data[target] : defaultValue;
-    console.log(logStamp(`returning ${target} value from obtained from Zendesk API query ${path}: `), returnValue);
+    console.log(logStamp(`returning ${target} value obtained from Zendesk API query [${path}]: `), returnValue);
     return returnValue;
 }
 
@@ -94,7 +94,7 @@ const findUser = async (query, requester = null) => {
             console.log(logStamp('Found existing user'), user.name);
         return user;
     }
-    console.log(logStamp(`User with query ${query} not found`), data);
+    console.log(logStamp(`User with query ${query} not found`), users);
     return null;
 }
 
