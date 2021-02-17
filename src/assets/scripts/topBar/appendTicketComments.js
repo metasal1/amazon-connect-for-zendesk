@@ -84,7 +84,7 @@ const updateTicketWithContactDetails = async (contact, ticketId) => {
             Direction: session.outbound ? 'outbound' : 'inbound',
             Contact_Id: contact.contactId,
             Recording_file: `${link(recordingUrl(contact.contactId), 'download')} (available within a few minutes after the call)`,
-            Contact_Trace_Record_URL: `${link(traceUrl(contact.contactId), 'download')} (available within a few minutes after the call)`,
+            Contact_Trace_Record_URL: `${link(traceUrl(contact.contactId), 'view')} (available within a few minutes after the call)`,
             Queue_Name: contact.getQueue().name,
             Agent_Name: agent.getName(),
             Agent_Routing_Profile: agent.getRoutingProfile().name,
