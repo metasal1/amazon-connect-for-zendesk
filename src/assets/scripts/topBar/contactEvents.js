@@ -42,17 +42,20 @@ const handleContactConnected = async () => {
     appSettings = session.zafInfo.settings;
 
     if (session.callInProgress) {
-        const ticketId = localStorage.getItem('vf.currentTicketId');
-        const userId = localStorage.getItem('vf.currentUserId');
-        console.log(logStamp("Call in progress: "), { ticket: ticketId, user: userId });
+        const assignedTicketId = localStorage.getItem('vf.assignedTicketId');
+        const userId = localStorage.getItem('vf.viewingUserId');
+        console.log(logStamp("Call in progress: "), {
+            assignedTicket: assignedTicketId,
+            user: userId
+        });
         const message = 'Call in progress.\n Resuming...';
         zafClient.invoke('notify', message, 'notice');
         if (userId) session.user = await getFromZD(`users/${userId}.json`, 'user');
-        if (ticketId) {
-            session.ticketId = ticketId;
+        if (assignedTicketId) {
+            session.ticketId = assignedTicketId;
             session.ticketAssigned = true;
             session.contactDetailsAppended = true;
-        } else
+        } else 
             zafClient.invoke('popover', 'show');
         const storedAttributes = localStorage.getItem('vf.storedAttributes');
         if (storedAttributes) session.appendedAttributes = JSON.parse(storedAttributes);
@@ -100,21 +103,21 @@ const handleContactConnected = async () => {
                     session.ticketId = await newTicket.createTicket().catch((err) => null); //TODO: handle these errors
                 if (session.ticketId) {
                     // assign this ticket to call and attach contact details automatically
-                    if (!session.callInProgress) {
+                    if (!session.callInProgress)
                         await appendTicketComments.appendContactDetails(session.contact, session.ticketId);
-                        localStorage.setItem('vf.currentTicketId', session.ticketId);
-                    }
                     await popTicket(session.zenAgentId, session.ticketId);
                     zafClient.invoke('popover', 'hide');
                 }
-            } else if (!session.ticketId) {
-                const userId = localStorage.getItem('vf.viewingUserId');
-                const ticketId = localStorage.getItem('vf.viewingTicketId');
-                if (ticketId || userId)
-                    await newTicket.refreshUser(ticketId ? 'ticket' : 'user', ticketId || userId)
+            } else {
+                if (!session.ticketId) {
+                    const userId = localStorage.getItem('vf.viewingUserId');
+                    const ticketId = localStorage.getItem('vf.viewingTicketId');
+                    if (ticketId || userId)
+                        await newTicket.refreshUser(ticketId ? 'ticket' : 'user', ticketId || userId)
+                }
                 resize('full');
             }
-    
+
         }
     }
 }

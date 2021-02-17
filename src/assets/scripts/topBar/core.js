@@ -4,14 +4,15 @@ import session from './session.js';
 import { zafClient } from './zafClient.js';
 
 export const resize = (size) => {
-    if (size === 'full')
+    const expand = size === 'full' && !session.ticketAssigned;
+    if (expand)
         ui.show('newTicketContainer');
     else
         ui.hide('newTicketContainer');
 
     zafClient.invoke('resize', {
         width: '360px',
-        height: size === 'full' ? '610px' : '510px'
+        height: expand ? '610px' : '510px'
     });
 }
 

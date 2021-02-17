@@ -149,6 +149,7 @@ export default {
             // open mini app
             zafClient.invoke('appsTray.show');
         }
+        localStorage.setItem('vf.assignedTicketId', ticketId);
 
         // do we need to update the user with the CLI?
         const cliNumber = session.phoneNo;
