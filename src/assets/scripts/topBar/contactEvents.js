@@ -48,15 +48,15 @@ const handleContactConnected = async () => {
         if (!errorMessage) {
             
             // test Connect API - TODO: remove
-            const connectAPI = new AWS.Connect({ apiVersion: '2017-08-08' });
-            const params = {
-                ContactId: session.contact.getContactId(),
-                InitialContactId: session.contact.getInitialContactId(),
-                InstanceId: appSettings.connectInstanceId
-            };
-            await connectAPI.suspendContactRecording(params).promise().catch((err) => {
-                console.error(logStamp('error calling suspendContactRecording: '), err);
-            });
+            // const connectAPI = new AWS.Connect({ apiVersion: '2017-08-08' });
+            // const params = {
+            //     ContactId: session.contact.getContactId(),
+            //     InitialContactId: session.contact.getInitialContactId(),
+            //     InstanceId: appSettings.connectInstanceId
+            // };
+            // await connectAPI.suspendContactRecording(params).promise().catch((err) => {
+            //     console.error(logStamp('error calling suspendContactRecording: '), err);
+            // });
             
             console.log(logStamp('pause/resume recording is enabled'));
             // TODO: enable UI
