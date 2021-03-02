@@ -1,0 +1,62 @@
+const { init, searchZendesk } = require('./api');
+const { httpStatus, keywordParams } = require('./constants');
+const { commonUserFields, commonTicketFields } = require('./commonFields');
+
+const template = async (event) => {
+    const { Parameters } = event.Details;
+    if (!Parameters.search_template) return { status_code: httpStatus.badRequest };
+
+    // populate search template with values
+    const params = Object.keys(Parameters).filter((key) => !keywordParams.includes(key));
+    let searchString = Parameters.search_template;
+    params.forEach((key) => {
+        searchString = searchString.replace(`{${key}}`, Parameters[key]);
+    });
+    
+    // check for bad formatting
+    if (searchString.includes('{') || searchString.includes('}')) return { status_code: httpStatus.badRequest };
+
+    const webClient = init();
+    if (!webClient) return { status_code: httpStatus.serverError };
+
+    let query = `/api/v2/search.json?query=${encodeURIComponent(searchString)}`;
+    if (Parameters.sort_by) query += `&sort_by=${Parameters.sort_by}`;
+    if (Parameters.sort_order) query += `&sort_order=${Parameters.sort_order}`;
+
+    const { results, count } = await searchZendesk(webClient, query);
+    if (!results) return { status_code: httpStatus.serverError };
+    if (!results.length) return { status_code: httpStatus.notFound };
+    let result = results[0];
+
+    // hack to return the primary user for a given phone number
+    // because Zendesk search api does not allow to query by shared_phone_number
+    if (searchString.startsWith('type:user') && searchString.includes(' phone:')) {
+        result = results.find((user) => !user.shared_phone_number);
+    }
+
+    const response = { status_code: httpStatus.ok, results_count: count };
+    if (Parameters.return_fields) {
+        const returnFields = Parameters.return_fields.split(',').map((field) => field.trim());
+        returnFields.forEach((field) => {
+            response[field] = result[field];
+        });
+    }
+
+    if (searchString.startsWith('type:ticket')) {
+        return { 
+            ...response,
+            ...commonTicketFields(result) 
+        };
+    }
+
+    if (searchString.startsWith('type:user')) {
+        return { 
+            ...response, 
+            ...commonUserFields(result) 
+        };
+    }
+    
+    return response;
+};
+
+module.exports = template; 
