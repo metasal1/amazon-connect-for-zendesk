@@ -65,7 +65,6 @@ export default {
                 requester.user = user;
                 requester.name = user.name;
                 session.visitedTabs[requesterKey] = requester;
-                localStorage.setItem('vf.viewingUserId', userId);
             }
         }
         if (requester.user) {

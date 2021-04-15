@@ -48,7 +48,6 @@ export const processOutboundCall = async (contact) => {
                 if (ticketId) {
                     await appendTicketComments.appendContactDetails(contact, ticketId);
                     await popTicket(session.zenAgentId, ticketId);
-                    localStorage.setItem('vf.currentTicketId', ticketId);
                     zafClient.invoke('popover', 'hide');
                 }
             } else {
@@ -72,7 +71,6 @@ export const processOutboundCall = async (contact) => {
         if (ticketInstances.length) {
             const ticketId = session.currentTabTicket;
             await appendTicketComments.appendContactDetails(contact, ticketId);
-            localStorage.setItem('vf.currentTicketId', ticketId);
             zafClient.invoke('popover', 'hide');
         }
     }

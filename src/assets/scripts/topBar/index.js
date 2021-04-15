@@ -54,7 +54,6 @@ window.onload = (event) => {
             // immediately update with call attributes, before popping to the agent
             resize('down');
             await appendTicketComments.appendContactDetails(session.contact, ticketId);
-            localStorage.setItem('vf.currentTicketId', ticketId);
             zafClient.invoke('popover', 'hide');
         }
     });

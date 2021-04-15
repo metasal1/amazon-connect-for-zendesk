@@ -93,8 +93,6 @@ export const processInboundCall = async (contact) => {
         const recentTicket = await findMostRecentTicket(userId);
         ticketId = recentTicket.id;
     }
-    if (ticketId) 
-        localStorage.setItem('vf.currentTicketId', ticketId);
 
     if (userId && ticketId) {
         // we have both the user and the ticket
@@ -133,7 +131,6 @@ export const processInboundCall = async (contact) => {
                     await appendTicketComments.appendContactDetails(session.contact, ticketId);
                     await popTicket(session.zenAgentId, ticketId);
                     zafClient.invoke('popover', 'hide');
-                    localStorage.setItem('vf.currentTicketId', ticketId);
                 }
             } else {
                 await popUser(session.zenAgentId, userId);
@@ -153,7 +150,6 @@ export const processInboundCall = async (contact) => {
                 await appendTicketComments.appendContactDetails(session.contact, ticketId);
                 await popTicket(session.zenAgentId, ticketId);
                 zafClient.invoke('popover', 'hide');
-                localStorage.setItem('vf.currentTicketId', ticketId);
             }
         } else
             resize('full');
