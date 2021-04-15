@@ -85,7 +85,7 @@ export const processInboundCall = async (contact) => {
 
     userId = user ? user.id : null;
     if (userId)
-        localStorage.setItem('vf.currentUserId', userId);
+        localStorage.setItem('vf.viewingUserId', userId);
 
     // for a known user select the most recent open ticket within the set timeframe
     // unless new ticket was explicitly requested

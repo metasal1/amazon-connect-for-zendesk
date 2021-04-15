@@ -7,10 +7,12 @@ import { dialableNumber } from './phoneNumbers.js'
 import newTicket from './newTicket.js';
 import { resize, popTicket, determineAssignmentBehavior } from './core.js';
 import ui from './ui.js'
+import { buttons } from '../constants/callControls.js';
+import { displayCallControls } from './callControls.js';
 
 window.onload = (event) => {
     // first, establish the window (tab) id
-    const windowIdKey = "vf.windowId"
+    const windowIdKey = 'vf.windowId';
     let windowId = sessionStorage.getItem(windowIdKey);
     if (!windowId) {
         windowId = uuidv4();
@@ -21,9 +23,14 @@ window.onload = (event) => {
         console.log(logStamp('reloaded window/tab'), windowId);
     }
     session.windowId = windowId;
-    window.addEventListener("beforeunload", () => {
-        sessionStorage.setItem(windowIdKey, windowId)
+    window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem(windowIdKey, windowId);
     });
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'visible') {
+            localStorage.setItem('vf.tabInFocus', session.windowId);
+        }
+    }, false);
 
     window.vfConnectTimeout = window.setTimeout(() => {
         // ui.swapImage('loadingImg', 'prohibited.png');
@@ -51,6 +58,36 @@ window.onload = (event) => {
             zafClient.invoke('popover', 'hide');
         }
     });
+
+    ui.onClick(buttons.SUSPEND, async () => {
+        console.log(logStamp('Suspending call'), windowId);
+        const connectAPI = new AWS.Connect({ apiVersion: '2017-08-08' });
+        const params = {
+            ContactId: session.contact.getContactId(),
+            InitialContactId: session.contact.getInitialContactId(),
+            InstanceId: session.zafInfo.settings.connectInstanceId,
+        };
+        await connectAPI.suspendContactRecording(params).promise().catch((err) => {
+            console.error(logStamp('error calling suspendContactRecording: '), err);
+        });
+        localStorage.setItem('vf.currentlyRecording', 'false');
+        displayCallControls({ isCurrentlyRecording: false });
+    })
+
+    ui.onClick(buttons.RESUME, async () => {
+        console.log(logStamp('Resuming call'), windowId);
+        const connectAPI = new AWS.Connect({ apiVersion: '2017-08-08' });
+        const params = {
+            ContactId: session.contact.getContactId(),
+            InitialContactId: session.contact.getInitialContactId(),
+            InstanceId: session.zafInfo.settings.connectInstanceId,
+        };
+        await connectAPI.resumeContactRecording(params).promise().catch((err) => {
+            console.error(logStamp('error calling resumeContactRecording: '), err);
+        });
+        localStorage.setItem('vf.currentlyRecording', 'true');
+        displayCallControls({ isCurrentlyRecording: true });
+    })
 
     try {
         zafInit();

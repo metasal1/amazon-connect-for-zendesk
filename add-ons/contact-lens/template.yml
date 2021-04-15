@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+######################### Parameters ##########################
+Parameters:
+  TargetEnvironment:
+    Description: Name of your target environment (dev, UAT, prod, ...)
+    Type: String
+    Default: prod
+  ConnectBucket:
+    Description: The name of an S3 bucket where your Connect call recordings are stored
+    Type: String
+    Default: connect-xyz
+    AllowedPattern: '(?=^.{3,63}$)(?!^(\d+\.)+\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$)'
+    ConstraintDescription: "Must be a valid AWS S3 bucket name."
+  ConnectMasterKeyId:
+    Description: Key ID of your KMS key that your stored call recordings are encrypted with
+    Type: String
+  ZendeskEmailID:
+    Type: String
+    Description:  Verified email address of a Zendesk agent or admin for the selected Zendesk Instance
+  ZendeskToken:
+    Type: String
+    Description: Zendesk Token for API access. This needs to be generated as a pre-requisite for this installation.
+    NoEcho: true
+  ZendeskURL:
+    Type: String
+    Description: Zendesk URL (https://<your-name>.zendesk.com).The Zendesk instance needs to be created as a pre-requisite for this installation.
+    AllowedPattern: "https://[a-zA-Z0-9-.]+.zendesk.com$"
+    ConstraintDescription: "Endpoint must be a valid Zendesk Host URL. For example, https://voicefoundryap.zendesk.com"
+  ConnectURL:
+    Type: String
+    Description: Connect instance URL (either https://<connect-instance>.awsapps.com, or https://<connect-instance>.my.connect.aws).
+    AllowedPattern: "https://[a-zA-Z0-9-.]+.(awsapps.com|my.connect.aws)$"
+    ConstraintDescription: "Endpoint must be a valid Connect instance URL."
+  TimeZone:
+    Type: String
+    Description: "Time zone (eg. Australia/Sydney) to be used when linking to Connect Contact Trace Records. For a full list see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+  
+  
+######################### Metadata ############################
+Metadata:
+  'AWS::ServerlessRepo::Application':
+    Name: Contact-Lens-Analysis-for-Zendesk
+    Description: Appends Amazon Connect's Contact Lens speech analysis to a corresponding Zendesk Support ticket. To be used with the Amazon Connect app for Zendesk.
+    Author: VoiceFoundry-APAC
+    SpdxLicenseId: GPL-3.0-or-later
+    LicenseUrl: LICENSE
+    ReadmeUrl: README.md
+    Labels: ['Connnect','Contact-Lens', 'Zendesk', 'Sentiment', 'Transcript']
+    HomePageUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/master/add-ons/contact-lens
+    SemanticVersion: 1.0.1
+    SourceCodeUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/master/add-ons/contact-lens
+
+Resources:
+
+  ######################### DynamoDB ##########################
+  tableZendeskRetries:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "zendeskUpdateRetries-${TargetEnvironment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "contactId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "contactId"
+          KeyType: "HASH"
+      TimeToLiveSpecification:
+        AttributeName:  "expires"
+        Enabled:  True
+
+  ######################### Lambda ##########################
+  functionUpdateTicket:
+    Type: AWS::Serverless::Function
+    DependsOn: tableZendeskRetries
+    Properties:
+      FunctionName: !Sub "contactLensZendeskUpdate-${TargetEnvironment}"
+      Description: "Triggered on upload of Contact Lens analysis to S3 bucket, it finds and updates the matching Zendesk support ticket"
+      Runtime: nodejs12.x
+      Handler: index.handler
+      CodeUri: updateTicket/
+      Timeout: 240
+      Policies: 
+        - AWSLambdaBasicExecutionRole
+        - S3ReadPolicy:
+            BucketName: !Ref ConnectBucket
+        - KMSDecryptPolicy:
+            KeyId: !Ref ConnectMasterKeyId
+        - DynamoDBCrudPolicy:
+            TableName: !Ref tableZendeskRetries
+      Environment:
+        Variables:
+          CONTACT_LENS_BUCKET: !Ref ConnectBucket
+          CONNECT_INSTANCE_URL: !Ref ConnectURL
+          RETRIES_TABLE: !Ref tableZendeskRetries
+          EXCLUSION_KEY: "no-support-ticket"
+          INCLUSION_KEY: "support-ticket"
+          EXPIRES_MINUTES: 20
+          MAX_QUERY_LENGTH: 1024
+          TIME_ZONE: !Ref TimeZone
+          ZD_EMAIL: !Ref ZendeskEmailID
+          ZD_TOKEN: !Ref ZendeskToken 
+          ZD_URL: !Ref ZendeskURL
+
+      Events:
+        scheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: 'rate(5 minutes)'
+            Name: !Sub zendeskRetrySchedule-${TargetEnvironment}
+            Description: invokes contactLensZendeskUpdate lambda which retries finding a matching support ticket

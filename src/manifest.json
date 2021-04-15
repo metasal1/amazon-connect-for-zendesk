@@ -74,6 +74,11 @@
       "default": ""
     },
     {
+      "name": "timeZone",
+      "type": "text",
+      "default": ""
+    },
+    {
       "name": "createTicketAfterMinutes",
       "type": "text",
       "default": ""
@@ -89,6 +94,6 @@
       "default": false
     }
   ],
-  "version": "2.1.2",
+  "version": "2.2.2",
   "frameworkVersion": "2.0"
 }

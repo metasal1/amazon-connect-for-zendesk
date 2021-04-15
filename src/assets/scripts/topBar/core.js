@@ -2,16 +2,43 @@ import ui from './ui.js';
 import logStamp from '../util/log.js';
 import session from './session.js';
 import { zafClient } from './zafClient.js';
+import { containerId as callControlsContainerId, resizeId as callControlsResizeId } from '../constants/callControls.js';
 
 export const resize = (size) => {
-    if (size === 'full')
-        ui.show('newTicketContainer');
-    else
-        ui.hide('newTicketContainer');
+    let height = 510;
+    const expand = size === 'full' && !session.ticketAssigned;
+
+    if(size !== callControlsResizeId) {
+        if (expand) {
+            ui.show('newTicketContainer');
+            height+=80;
+        } else {
+            ui.hide('newTicketContainer');
+        }
+        const callControlsElement = document.getElementById(callControlsContainerId);
+        if(callControlsElement && callControlsElement.style.display === 'flex'){
+            height+=70;
+        }       
+    }
+    
+    if(size === callControlsResizeId) {
+        const newTicketContainer = document.getElementById('newTicketContainer');
+        if(newTicketContainer && newTicketContainer.style.display === 'block'){
+            height+=80;
+        }
+        ui.show(callControlsContainerId, 'flex')
+        height+=70;
+    }
+
+    if(size === 'contactEnded') {
+        ui.hide('newTicketcontainer')
+        ui.hide(callControlsContainerId)
+        height = 510;
+    }
 
     zafClient.invoke('resize', {
         width: '360px',
-        height: size === 'full' ? '610px' : '510px'
+        height: `${height}px`,
     });
 }
 
@@ -39,7 +66,7 @@ export const getFromZD = async (path, target, defaultValue = null) => {
         contentType: 'application/json',
     }).catch((err) => { console.error(logStamp(`getting ${target} by ${path} from Zendesk API: `), err) });
     const returnValue = data && data[target] ? data[target] : defaultValue;
-    console.log(logStamp(`returning ${target} value from obtained from Zendesk API query ${path}: `), returnValue);
+    console.log(logStamp(`returning ${target} value obtained from Zendesk API query [${path}]: `), returnValue);
     return returnValue;
 }
 
@@ -94,7 +121,7 @@ const findUser = async (query, requester = null) => {
             console.log(logStamp('Found existing user'), user.name);
         return user;
     }
-    console.log(logStamp(`User with query ${query} not found`), data);
+    console.log(logStamp(`User with query ${query} not found`), users);
     return null;
 }
 

@@ -104,5 +104,8 @@ dist
 .tern-port
 
 # Local dev artifacts
+src/AmazonConnectApp*.zip
 src/srcdev.zip
 src/ziplist.txt
+sandbox.html
+Contact Lens Sample.json
