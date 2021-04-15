@@ -5,4 +5,4 @@ Contact Lens Analysis for Zendesk is an optional add-on to the [Amazon Connect a
 * conversation statistics
 * conversation transcript
 
-You can view the detailed installation steps **here**.
+You can view the detailed installation steps [here](https://github.com/voicefoundryap/amazon-connect-for-zendesk/blob/master/add-ons/contact-lens/Enabling%20speech%20analysis%20using%20Contact%20Lens-v2.2.pdf).

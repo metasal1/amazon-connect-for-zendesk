@@ -17,14 +17,12 @@ export default {
     callInProgress: false,
     pauseRecording: false,
 
-    clear: function() {
+    clear: function (withStorage = true) {
         this.contact = {};
-        this.agent = {};
         this.state = {
             callback: false,
             connecting: false,
-            connected: false,
-            callEnded: false
+            connected: false
         };
         this.isTransfer = false;
         this.isMonitoring = false;
@@ -42,6 +40,16 @@ export default {
         this.appConfig.forEach((setting) => this.zafInfo.settings[setting.name] = setting.value || setting.default);
         this.callInProgress = false;
         this.pauseRecording = false;
+        if (withStorage) this.clearStorage();
+    },
+
+    clearStorage: function () {
+        // preserve just the focused window
+        const focusedTab = localStorage.getItem('vf.tabInFocus');
         localStorage.clear();
+        if (focusedTab) {
+            // needs an out of thread execution for some reason
+            window.setTimeout(() => { localStorage.setItem('vf.tabInFocus', focusedTab) }, 0);
+        }
     }
 }

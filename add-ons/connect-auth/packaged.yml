@@ -19,15 +19,15 @@ Metadata:
     Author: VoiceFoundry-APAC
     SpdxLicenseId: GPL-3.0-or-later
     LicenseUrl: s3://214558022353-connect-zendesk-ap-southeast-2/zendesk-add-ons/connect-auth/e62637ea8a114355b985fd86c9ffbd6e
-    ReadmeUrl: s3://214558022353-connect-zendesk-ap-southeast-2/zendesk-add-ons/connect-auth/82013e4428c4c390f6611ac3ac1b6586
+    ReadmeUrl: s3://214558022353-connect-zendesk-ap-southeast-2/zendesk-add-ons/connect-auth/240fcdfed1875fa0439d271e34717868
     Labels:
     - Connnect
     - Zendesk
     - Pause-Resume
     - Recording
-    HomePageUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/release/add-ons/connect-auth
-    SemanticVersion: '0.0.5'
-    SourceCodeUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/release/add-ons/connect-auth
+    HomePageUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/master/add-ons/connect-auth
+    SemanticVersion: 1.0.1
+    SourceCodeUrl: https://github.com/voicefoundryap/amazon-connect-for-zendesk/tree/master/add-ons/connect-auth
 Resources:
   policyConnectFromZendesk:
     Type: AWS::IAM::ManagedPolicy
