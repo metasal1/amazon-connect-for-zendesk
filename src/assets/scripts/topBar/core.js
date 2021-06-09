@@ -116,7 +116,13 @@ const findUser = async (query, requester = null) => {
                 return null;
             }
         }
-        const user = users.find((user) => !user.shared_phone_number);
+        const user = await Promise.any(users.map((user) => (async (user, query) => {
+            const userIdentities = await getFromZD(`users/${user.id}/identities`, 'identities', []);
+            if (userIdentities.some((identity) => identity.type === 'phone_number' && identity.value.replace(/[ \.\(\)-]/g, '') === query)) {
+                console.log(logStamp(`Matched query ${query} with user `), user);
+                return user;
+            } else return Promise.reject();
+        })(user, query))).catch(() => null);
         if (user)
             console.log(logStamp('Found existing user'), user.name);
         return user;
