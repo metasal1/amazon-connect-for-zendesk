@@ -101,7 +101,7 @@ const findUser = async (query, requester = null) => {
         query = query.substring(prefix.length);
 
     console.log(logStamp('Searching for user by query: '), query);
-    const users = await getFromZD(`search.json?query=role%3Aend-user%20phone%3A*${query}`, 'results', []);
+    const users = await getFromZD(`search.json?query=phone%3A*${query}`, 'results', []);
     if (users.length) {
         console.log(logStamp('Found matching user(s): '), users);
         if (requester) {
