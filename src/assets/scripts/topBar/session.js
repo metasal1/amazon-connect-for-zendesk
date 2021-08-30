@@ -26,6 +26,7 @@ export default {
         };
         this.isTransfer = false;
         this.isMonitoring = false;
+        this.popCompleted = false;
         this.outbound = false;
         this.appendedAttributes = {}
         this.ticketId = null;
@@ -35,6 +36,7 @@ export default {
         this.transcriptHtml = '';
         this.speechAnalysisHtml = '';
         this.dialOut = null;
+        this.currentTabTicket = null;
         this.ticketInstance = null;
         this.contactDetailsAppended = false;
         this.appConfig.forEach((setting) => this.zafInfo.settings[setting.name] = setting.value || setting.default);

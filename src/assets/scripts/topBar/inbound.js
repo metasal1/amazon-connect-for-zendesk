@@ -107,8 +107,10 @@ export const processInboundCall = async (contact) => {
                 zafClient.invoke('popover', 'hide');
             } else
                 resize('full');
-        } else
+        } else {
             session.ticketId = ticketId;
+            session.popCompleted = true;
+        }
         return;
     }
 
@@ -119,6 +121,8 @@ export const processInboundCall = async (contact) => {
         await newTicket.refreshUser('ticket', ticketId);
         if (session.state.connected)
             resize('full');
+        else
+            session.popCompleted = true;
         return;
     }
 
@@ -136,8 +140,10 @@ export const processInboundCall = async (contact) => {
                 await popUser(session.zenAgentId, userId);
                 resize('full');
             }
-        } else
+        } else {
             await popUser(session.zenAgentId, userId);
+            session.popCompleted = true;
+        }
         return;
     }
 
@@ -153,5 +159,6 @@ export const processInboundCall = async (contact) => {
             }
         } else
             resize('full');
-    }
+    } else
+        session.popCompleted = true;
 }

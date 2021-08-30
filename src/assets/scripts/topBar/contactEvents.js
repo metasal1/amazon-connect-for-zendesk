@@ -42,12 +42,13 @@ const handleContactConnecting = async () => {
     if (session.isMonitoring) return;
 
     session.ticketId = null;
-
+    
     if (session.contact.inboundConnection) {
         await appConfig.applyAttributes(session);
         appSettings = session.zafInfo.settings;
         console.log(logStamp('handleContactIncoming, pop before connected: '), appSettings.popBeforeCallConnected);
         if (appSettings.popBeforeCallConnected) {
+            session.popCompleted = false;
             await processInboundCall(session.contact);
         }
     }
@@ -127,7 +128,7 @@ const handleContactConnected = async () => {
 
         if (!appSettings.popBeforeCallConnected)
             await processInboundCall(session.contact);
-        else {
+        else if (session.popCompleted || session.callInProgress) {
             const autoAssignTickets = determineAssignmentBehavior();
             if (autoAssignTickets) {
                 if (!session.user)
@@ -342,7 +343,10 @@ export default (contact) => {
             session.state.callEnded = true;
             handleContactEnded()
                 .then((result) => result)
-                .catch((err) => { console.error(logStamp('handleContactEnded'), err) });
+                .catch((err) => { 
+                    console.error(logStamp('handleContactEnded'), err);
+                    session.clear();
+                });
         }
     });
 

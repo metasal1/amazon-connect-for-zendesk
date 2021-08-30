@@ -176,9 +176,10 @@ const onInstanceRegistered = async (context) => {
 };
 
 const onTabSwitched = async (context) => {
-    // console.log(logStamp('onTabSwitched'), context);
+    console.log(logStamp('onTabSwitched'), context);
 
     // if new tab is a ticket then save the id for possible outbound dialing to unrecognised number
+    session.dialOut = null;
     session.currentTabTicket = context.tabType === 'ticket' ? context.itemId : null;
 
     const contact = session.contact;
