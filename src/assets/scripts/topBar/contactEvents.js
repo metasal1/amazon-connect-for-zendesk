@@ -174,7 +174,7 @@ const handleContactEnded = async () => {
     }
 
     const outbound = session.contact.outboundConnection;
-    const unassignedOutboundCall = outbound && !session.user;
+    const unassignedOutboundCall = outbound && !session.user && !appSettings.createOnAllOutbound;
     console.log(logStamp('handleContactEnded'), outbound
         ? 'outbound'
         : (session.contact.inboundConnection

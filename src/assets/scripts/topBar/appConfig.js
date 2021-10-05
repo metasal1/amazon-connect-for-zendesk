@@ -29,6 +29,14 @@ const hardcoded = [
         attribute: "force_ticket_creation"
     },
     {
+        name: "createOnAllOutbound",
+        label: "Create a ticket for every outoubnd call",
+        description: "Normally, tickets will not be created for outbound calls to unknown numbers. If this attribute is set to true though, a new user will be automatically created along with a new ticket.",
+        type: "checkbox",
+        default: false,
+        attribute: "all_outbound"
+    },
+    {
         name: "popBeforeCallConnected",
         label: "Display customer/ticket details in Zendesk before accepting the incoming call",
         description: "If this option is unticked then customer or ticket details will be displayed in Zendesk only after the agent accepts the call.",
