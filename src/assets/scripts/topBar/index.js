@@ -9,6 +9,7 @@ import { resize, popTicket, determineAssignmentBehavior } from './core.js';
 import ui from './ui.js'
 import { buttons } from '../constants/callControls.js';
 import { displayCallControls } from './callControls.js';
+import unavailableAgentStates from './unavailableAgentStates.js';
 
 window.onload = (event) => {
     // first, establish the window (tab) id
@@ -128,6 +129,16 @@ window.onload = (event) => {
 const onDialout = (dialOut) => {
     console.log(logStamp('dialing out'), dialOut);
 
+
+    const agentState = session.agent.getState();
+    console.log(logStamp("Agent's state"), agentState);
+    if (unavailableAgentStates.includes(agentState)) {
+        const message = "Please make sure you're in an available status first.";
+        zafClient.invoke('notify', message, 'error', {sticky: true});
+        zafClient.invoke('popover', 'show');
+        return;
+    }
+
     session.dialOut = dialOut;
     // number pad supported via softphone only
     if (!dialOut.number) {
@@ -135,7 +146,7 @@ const onDialout = (dialOut) => {
         zafClient.invoke('notify', message, 'notice');
         zafClient.invoke('popover', 'show');
         return;
-    }
+    }    
 
     const number = dialableNumber(dialOut.number);
     console.log(logStamp('Attempting to call'), number);
