@@ -1,9 +1,9 @@
 {
   "name": "Amazon Connect",
   "author": {
-    "name": "VoiceFoundry APAC",
-    "email": "zendeskconnect@voicefoundry.com.au",
-    "url": "https://www.voicefoundry.com.au"
+    "name": "VoiceFoundry APAC and Salim Karim",
+    "email": "salim.karim@aware.com.au",
+    "url": "https://www.aware.com.au"
   },
   "defaultLocale": "en",
   "private": false,
@@ -71,12 +71,12 @@
     {
       "name": "defaultCountryPrefix",
       "type": "text",
-      "default": ""
+      "default": "+61"
     },
     {
       "name": "timeZone",
       "type": "text",
-      "default": ""
+      "default": "Australia/Melbourne"
     },
     {
       "name": "createTicketAfterMinutes",

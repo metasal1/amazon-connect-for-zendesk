@@ -109,3 +109,6 @@ src/srcdev.zip
 src/ziplist.txt
 sandbox.html
 Contact Lens Sample.json
+
+# Aware settings
+src/zcli.apps.config.json
